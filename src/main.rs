@@ -21,11 +21,6 @@ async fn main() -> Result<(), ()> {
             "physicalRam": sys.memory().expect("h").total.as_u64()
         })).expect("Failed to serialize."))
             .send().await.expect("Request failed.");
-        client.post(config.url.clone() + "/updateOther")
-            .body(serde_json::to_vec(&json!({
-            "bootTimestamp": sys.boot_time().expect("h").naive_utc().timestamp()
-        })).expect("Failed to serialize."))
-            .send().await.expect("Request failed.");
     }
     if config.update_interval == 0 { config.update_interval = 2; }
     let interval = time::interval(Duration::from_secs(config.update_interval));
@@ -35,10 +30,12 @@ async fn main() -> Result<(), ()> {
         let sys = System::new();
         let client = Client::new();
         let mem = sys.memory().expect("h");
-        client.post(config.url.clone() + "/updateMemory")
+        let boot_timestamp = sys.boot_time().expect("h").naive_utc().timestamp();
+        client.post(config.url.clone() + "/update")
             .body(serde_json::to_vec(&json!({
-                "used": mem.total.as_u64() - mem.free.as_u64(),
-                "free": mem.free.as_u64()
+                "memoryUsed": mem.total.as_u64() - mem.free.as_u64(),
+                "memoryFree": mem.free.as_u64(),
+                "bootTimestamp": boot_timestamp,
         })).expect("Failed to serialize."))
             .send().await.expect("failed to req");
         Some(((), interval))
