@@ -1,0 +1,15 @@
+[package]
+name = "jandash-client-rs"
+version = "0.1.0"
+authors = ["Jan0660 <jan0660@tutanota.com>"]
+edition = "2018"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.11.4"
+serde = { version = "1.0.126", features = ["derive"] }
+serde_json = "1.0.64"
+systemstat = "0.1.8"
+tokio = { version = "1.8.0", features = ["rt", "macros", "rt-multi-thread"] }
+chrono = "*"
+futures = "*"
