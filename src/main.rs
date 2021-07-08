@@ -36,6 +36,7 @@ async fn main() -> Result<(), ()> {
                 "memoryUsed": mem.total.as_u64() - mem.free.as_u64(),
                 "memoryFree": mem.free.as_u64(),
                 "bootTimestamp": boot_timestamp,
+                "cpuTemperature": sys.cpu_temp().unwrap_or(0.0)
         })).expect("Failed to serialize."))
             .send().await.expect("failed to req");
         Some(((), interval))
